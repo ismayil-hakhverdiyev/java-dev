@@ -25,7 +25,7 @@
 
         <spring-retry.version>1.2.5.RELEASE</spring-retry.version>
         <spring-vault.version>2.3.3</spring-vault.version>
-        <spring-boot.version>2.2.13.RELEASE</spring-boot.version>
+        <spring-boot.version>3.4.1</spring-boot.version>
         <datasource-proxy.version>1.9</datasource-proxy.version>
         <eddsa-java.version>0.3.0</eddsa-java.version>
         <querydsl.version>4.2.2</querydsl.version>
@@ -55,7 +55,7 @@
         <org.mockito.version>3.12.4</org.mockito.version>
         <org.postgresql.postgresql.version>42.4.3</org.postgresql.postgresql.version>
         <org.slf4j.version>1.7.25</org.slf4j.version>
-        <org.springframework.version>5.3.39</org.springframework.version>
+        <org.springframework.version>6.2.2</org.springframework.version>
         <org.springframework.amqp.version>2.3.12</org.springframework.amqp.version>
         <org.springframework.data.version>2.5.0</org.springframework.data.version>
         <org.springframework.cloud.spring-cloud-function.version>3.2.4</org.springframework.cloud.spring-cloud-function.version>

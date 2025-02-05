@@ -1,7 +1,6 @@
 package com.r.crypto.service.encryption.impl.vault;
 
 import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.vault.VaultException;
@@ -15,6 +14,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
 
 // This class is a modified copy of Spring's original VaultTransitTemplate,
 // with a couple tweaks including prefixing the key name for multitenancy,
@@ -196,11 +196,11 @@ public class RVaultTransitTemplate implements VaultTransitOperations {
                                             Map<String, String> request) {
 
         if (!ObjectUtils.isEmpty(context.getContext())) {
-            request.put("context", Base64Utils.encodeToString(context.getContext()));
+            request.put("context", Base64.getEncoder().encodeToString(context.getContext()));
         }
 
         if (!ObjectUtils.isEmpty(context.getNonce())) {
-            request.put("nonce", Base64Utils.encodeToString(context.getNonce()));
+            request.put("nonce", Base64.getEncoder().encodeToString(context.getNonce()));
         }
     }
 
