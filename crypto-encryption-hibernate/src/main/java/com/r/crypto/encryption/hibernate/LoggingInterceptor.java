@@ -3,6 +3,7 @@ package com.r.crypto.encryption.hibernate;
 import org.hibernate.CallbackException;
 import org.hibernate.Interceptor;
 import org.hibernate.Transaction;
+import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.Iterator;
 
-public class LoggingInterceptor implements Interceptor {
+public class LoggingInterceptor implements Interceptor, StatementInspector {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -82,11 +83,8 @@ public class LoggingInterceptor implements Interceptor {
         return null;
     }
 
-    @Override
-    public Object instantiate(String entityName, Serializable id) throws CallbackException {
-        logger.debug("instantiate");
-        return null; // You no longer need EntityMode here
-    }
+    // The instantiate method is removed from the Interceptor interface in Hibernate 6
+    // So we no longer need this method here.
 
     @Override
     public String getEntityName(Object object) throws CallbackException {
@@ -115,10 +113,10 @@ public class LoggingInterceptor implements Interceptor {
         logger.debug("afterTransactionCompletion");
     }
 
+    // Implement StatementInspector interface for SQL statement logging
     @Override
-    @SuppressWarnings("deprecation")
-    public String onPrepareStatement(String sql) {
-        logger.debug("onPrepareStatement");
-        return null;
+    public String inspect(String sql) {
+        logger.debug("onPrepareStatement: {}", sql);
+        return sql;  // Return SQL statement as-is
     }
 }

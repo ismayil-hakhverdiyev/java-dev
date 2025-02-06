@@ -1,25 +1,21 @@
 package com.r.crypto.encryption.hibernate;
 
 import org.hibernate.CallbackException;
-import org.hibernate.EntityMode;
 import org.hibernate.Interceptor;
 import org.hibernate.Transaction;
+import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.r.crypto.util.Util.toSimpleString;
 
-public class DebugInterceptor implements Interceptor {
+public class DebugInterceptor implements Interceptor, StatementInspector {
     private static final Logger logger = LoggerFactory.getLogger(DebugInterceptor.class);
 
     public static final Map<String, Invocations> invocationsMap = new ConcurrentHashMap<>();
@@ -152,13 +148,6 @@ public class DebugInterceptor implements Interceptor {
     }
 
     @Override
-    public Object instantiate(String entityName, EntityMode entityMode, Serializable id) throws CallbackException {
-        logger.trace("instantiate: entityName={} entityMode={} id={}", entityName, entityMode, id);
-        record("instantiate", entityName, entityMode, id);
-        return null;
-    }
-
-    @Override
     public String getEntityName(Object object) throws CallbackException {
         logger.trace("getEntityName: {}", toSimpleString(object));
         record("getEntityName", toSimpleString(object));
@@ -190,13 +179,13 @@ public class DebugInterceptor implements Interceptor {
         record("afterTransactionCompletion", toSimpleString(tx), tx.getStatus().toString());
     }
 
+    // Implement StatementInspector interface
     @Override
-    @SuppressWarnings("deprecation")
-    public String onPrepareStatement(String sql) {
-        logger.trace("onPrepareStatement: sql={}", sql);
+    public String inspect(String sql) {
+        logger.trace("SQL Statement: {}", sql);
         String operation = (sql == null) ? null : sql.split(" ")[0];
         record("onPrepareStatement", operation, sql);
-        return null;
+        return sql;  // Return sql statement as-is
     }
 
     private void record(String method, String operation, Object... data) {
